@@ -34,7 +34,7 @@ int top(const Stack& stack) {
 // print the content of the stack, top first
 void print_stack(const Stack& stack) {
     std::cout << "[";
-    for (int i = stack.size - 1; i >= 0; i--)
+    for (int i = 0; i < stack.size; i++)
         std::cout << " " << stack.data[i];
     std::cout << " ]" << std::endl;
 }

@@ -27,7 +27,7 @@ int top(int A[], const int size) {
 // print the content of the stack, top first
 void print_stack(int A[], const int size) {
     std::cout << "[";
-    for (int i = size - 1; i >= 0; i--)
+    for (int i = 0; i < stack.size; i++)
         std::cout << " " << A[i];
     std::cout << " ]" << std::endl;
 }
