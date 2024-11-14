@@ -29,7 +29,7 @@ int head(const Queue& q) {
     return q.data[q.head];
 }
 
-void enqueue(Queue& q, int elem) {
+void enqueue(Queue& q, const int elem) {
     if (full(q)) std::cerr << "queue is full" << std::endl;
     else {
         q.data[(q.head + q.size) % MAX] = elem;

@@ -1,6 +1,6 @@
 #include <iostream>
 
-const int MAX = 1024;
+constexpr int MAX = 1024;
 
 // insert an element at the top of the stack
 void push(int A[], int& size, const int e) {
@@ -27,7 +27,7 @@ int top(int A[], const int size) {
 // print the content of the stack, top first
 void print_stack(int A[], const int size) {
     std::cout << "[";
-    for (int i = 0; i < stack.size; i++)
+    for (int i = 0; i < size; i++)
         std::cout << " " << A[i];
     std::cout << " ]" << std::endl;
 }

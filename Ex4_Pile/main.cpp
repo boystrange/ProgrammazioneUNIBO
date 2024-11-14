@@ -1,6 +1,6 @@
 #include <iostream>
 
-const int MAX = 1024;
+constexpr int MAX = 1024;
 
 struct Stack {
     int data[MAX];
