@@ -1,10 +1,12 @@
+// ESERCIZIO 1
+
 #include <iostream>
 
-constexpr int MAX = 1024;
+const int MAX = 1024;
 
-// insert an element at the top of the stack
+// inserisce elemento in cima alla pila
 int push(int A[], const int size, const int e) {
-    // precondition: 0 <= size && size < MAX
+    // precondizione: 0 <= size && size <= MAX
     if (size == MAX - 1) {
         std::cerr << "push on full stack" << std::endl;
         return -1;
@@ -14,20 +16,21 @@ int push(int A[], const int size, const int e) {
     }
 }
 
-// remove the element at the top of the stack
+// rimuove elemento dalla cima della pila
 int pop(int A[], const int size) {
-    // precondition: 0 <= size && size < MAX
+    // precondizione: 0 <= size && size <= MAX
     if (size == 0) std::cerr << "pop on empty stack" << std::endl;
     return size - 1;
 }
 
+// restituisce elemento in cima alla pila senza rimuoverlo
 int top(int A[], const int size) {
-    // precondition: 0 < size && size <= MAX
+    // precondizione: 0 <= size && size <= MAX
     if (size == 0) std::cerr << "top on empty stack" << std::endl;
     return A[size - 1];
 }
 
-// print the content of the stack, top first
+// stampa il contenuto della pila, l'elemento in cima più a destra
 void print_stack(int A[], const int size) {
     std::cout << "[";
     for (int i = 0; i < size; i++)
