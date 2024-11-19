@@ -10,6 +10,9 @@ OPTIONS = -V papersize:A4
 
 all: $(TARGETS)
 
+%: %.cpp
+	g++ -o $@ $<
+
 %.pdf: %.md
 	pandoc $< $(OPTIONS) -o $@
 
