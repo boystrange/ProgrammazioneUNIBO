@@ -2,11 +2,12 @@ NULL =
 
 SOURCES = \
   EX1.md \
+  EX2.md \
   $(NULL)
 
 TARGETS = $(SOURCES:%.md=%.pdf)
 
-OPTIONS = -V papersize:A4
+OPTIONS = -V lang=it -V papersize:A4
 
 all: $(TARGETS)
 
