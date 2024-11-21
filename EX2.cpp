@@ -1,6 +1,6 @@
 #include <iostream>
 
-const int MAX = 10;
+const int MAX = 1024;
 
 typedef int Ptr;
 
@@ -24,7 +24,7 @@ void init(List& l) {
 }
 
 Ptr alloc(List& l, int elem, Ptr next) {
-  Ptr p = l.free;
+  const Ptr p = l.free;
   if (p == -1) {
     std::cerr << "out of memory" << std::endl;
     return -1;
@@ -43,13 +43,13 @@ void free(List& l, Ptr p) {
 }
 
 void push_front(List& l, int elem) {
-  Ptr p = alloc(l, elem, l.head);
+  const Ptr p = alloc(l, elem, l.head);
   if (p != -1) l.head = p;
 }
 
 void pop_front(List& l) {
   if (l.head != -1) {
-    Ptr p = l.head;
+    const Ptr p = l.head;
     l.head = l.node[l.head].next;
     free(l, p);
   }
@@ -64,7 +64,7 @@ void push_back(List& l, int elem) {
     push_front(l, elem);
   else {
     // la lista non è vuota e p è l'indice dell'ultimo elemento
-    Ptr q = alloc(l, elem, -1);
+    const Ptr q = alloc(l, elem, -1);
     if (q != -1) l.node[p].next = q;
   }
 }
@@ -78,7 +78,6 @@ void pop_back(List& l) {
     p = l.node[p].next;
   }
   if (p != -1) { // c'era un nodo da rimuovere
-    // l.node[p].next == -1
     if (prev != -1) l.node[prev].next = -1;
     else l.head = -1;
     free(l, p);
@@ -86,17 +85,58 @@ void pop_back(List& l) {
 }
 
 void reverse(List& l) {
-  Ptr prev = -1;
+  Ptr r = -1;
   Ptr p = l.head;
   while (p != -1) {
     const Ptr q = l.node[p].next;
-    l.node[p].next = prev;
-    prev = p;
+    l.node[p].next = r;
+    r = p;
     p = q;
   }
-  l.head = prev;
+  l.head = r;
 }
 
+// SOLUZIONE ESERCIZIO 1
+int length(const List& l) {
+  int n = 0;
+  for (int p = l.head; p != -1; p = l.node[p].next)
+    n++;
+  return n;
+}
+
+// SOLUZIONE ESERCIZIO 2
+int sum(const List& l) {
+  int s = 0;
+  for (Ptr p = l.head; p != -1; p = l.node[p].next)
+    s += l.node[p].elem;
+  return s;
+}
+
+// SOLUZIONE ESERCIZIO 3
+int find_min(const List& l) {
+  Ptr p = l.head;
+  if (p == -1) return -1;
+  int m = l.node[p].elem;
+  while (p != -1) {
+    m = std::min(m, l.node[p].elem);
+    p = l.node[p].next;
+  }
+  return m;
+}
+
+// SOLUZIONE ESERCIZIO 4
+float average(const List& l) {
+  return ((float) sum(l)) / length(l);
+}
+
+// SOLUZIONE ESERCIZIO 5
+bool member(const List& l, int elem) {
+  for (Ptr p = l.head; p != -1; p = l.node[p].next)
+    if (l.node[p].elem == elem) return true;
+  return false;
+}
+
+// SOLUZIONE ESERCIZIO 6
 void insert(List& l, int elem) {
   Ptr p = l.head;
   Ptr prev = -1;
@@ -104,15 +144,23 @@ void insert(List& l, int elem) {
     prev = p;
     p = l.node[p].next;
   }
-  Ptr q = alloc(l, elem, p);
+  const Ptr q = alloc(l, elem, p);
   if (prev != -1) l.node[prev].next = q;
   else l.head = q;
 }
 
-void remove(List& l, Ptr q) {
+// SOLUZIONE ESERCIZIO 7
+void sort(const List& l, List& m) {
+  init(m);
+  for (Ptr p = l.head; p != -1; p = l.node[p].next)
+    insert(m, l.node[p].elem);
+}
+
+// SOLUZIONE ESERCIZIO 8
+void remove(List& l, int elem) {
   Ptr p = l.head;
   Ptr prev = -1;
-  while (p != -1 && p != q) {
+  while (p != -1 && l.node[p].elem != elem) {
     prev = p;
     p = l.node[p].next;
   }
@@ -125,16 +173,11 @@ void remove(List& l, Ptr q) {
   }
 }
 
-int length(const List& l) {
-  int n = 0;
-  for (int p = l.head; p != -1; p = l.node[p].next)
-    n++;
-  return n;
-}
+// FUNZIONI AUSILIARIE DI TEST
 
 void create_list(List& l) {
   for (int i = 0; i < 16; i++)
-    insert(l, rand() % 50);
+    push_front(l, rand() % 50);
 }
 
 void print_list(const List& l) {
@@ -153,4 +196,7 @@ int main() {
   print_list(l);
   pop_back(l);
   print_list(l);
+  List m;
+  sort(l, m);
+  print_list(m);
 }

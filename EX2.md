@@ -10,23 +10,24 @@ alla lista usata.
 
 ![Array di nodi con lista usata e lista libera.](ArrayList.jpg)
 
-Innanzi tutto definiamo un tipo `Ptr` equivalente a `int` ma che useremo per
-indicare l'indice (o "puntatore") di un nodo nell'array.
+Innanzi tutto definiamo un tipo `Ptr` equivalente a `int` ma che
+useremo per indicare l'indice (o "puntatore") di un nodo nell'array.
 
 ```c++
 typedef int Ptr;
 ```
 
-Questa direttiva serve esclusivamente per dare un nome alternativo (in questo
-caso `Ptr`) a un tipo già esistente (in questo caso `int`). Di fatto `Ptr` e
-`int` sono equivalenti, ma l'uso di `Ptr` migliora la leggibilità del codice
-indicando più esplicitamente cosa intendiamo rappresentare con una variabile o
-un argomento di quel tipo.
+Questa direttiva serve esclusivamente per dare un nome alternativo
+(in questo caso `Ptr`) a un tipo già esistente (in questo caso
+`int`). Di fatto `Ptr` e `int` sono equivalenti, ma l'uso di `Ptr`
+migliora la leggibilità del codice indicando più esplicitamente cosa
+intendiamo rappresentare con una variabile o un argomento di quel
+tipo.
 
-Definiamo poi la struttura `Node` che rappresenta un singolo nodo della lista.
-Si noti l'uso di `int` come tipo dell'elemento e l'uso di `Ptr` come tipo
-dell'indicatore al prossimo nodo. Usiamo il numero `-1` come "indicatore non
-valido".
+Definiamo poi la struttura `Node` che rappresenta un singolo nodo
+della lista.  Si noti l'uso di `int` come tipo dell'elemento e l'uso
+di `Ptr` come tipo dell'indicatore al prossimo nodo. Usiamo il
+numero `-1` come "indicatore non valido".
 
 ```c++
 struct Node {
@@ -69,7 +70,7 @@ void init(List& l) {
 
 ```c++
 Ptr alloc(List& l, int elem, Ptr next) {
-  Ptr p = l.free;
+  const Ptr p = l.free;
   if (p == -1) {           // la lista libera è vuota, non c'è spazio!
     std::cerr << "out of memory" << std::endl;
     return -1;
@@ -81,10 +82,10 @@ Ptr alloc(List& l, int elem, Ptr next) {
 }
 ```
 
-Questa funzione rimuove il primo nodo dalla lista libera e lo inizializza in
-modo tale che l'elemento sia `elem` e l'indice del nodo successivo sia `next`.
-La funzione restituisce l'indice del nodo allocato, oppure `-1` se la lista
-libera era vuota.
+Questa funzione rimuove il primo nodo dalla lista libera e lo
+inizializza in modo tale che l'elemento sia `elem` e l'indice del
+nodo successivo sia `next`.  La funzione restituisce l'indice del
+nodo allocato, oppure `-1` se la lista libera era vuota.
 
 ## Cancellazione di un nodo
 
@@ -97,17 +98,18 @@ void free(List& l, Ptr p) {
 }
 ```
 
-Questa funzione inserisce il nodo con indice `p` nella lista libera, rendendolo
-disponibile per successive allocazioni. Siccome l'ordine dei nodi nella lista
-libera non è importante, il nodo liberato viene inserito all'inizio della lista
-libera, che è un'operazione efficiente che non dipende dalla lunghezza della
-lista libera.
+Questa funzione inserisce il nodo con indice `p` nella lista libera,
+rendendolo disponibile per successive allocazioni. Siccome l'ordine
+dei nodi nella lista libera non è importante, il nodo liberato viene
+inserito all'inizio della lista libera, che è un'operazione
+efficiente in quanto non dipende dalla lunghezza della lista libera.
 
 ## Aggiunta di un elemento all'inizio
 
 ```c++
 void push_front(List& l, int elem) {
-  l.head = alloc(l, elem, l.head);
+  const Ptr p = alloc(l, elem, l.head);
+  if (p != -1) l.head = p;
 }
 ```
 
@@ -121,7 +123,7 @@ appena allocato.
 ```c++
 void pop_front(List& l) {
   if (l.head != -1) {
-    Ptr p = l.head;               // ricordiamo il nodo da liberare
+    const Ptr p = l.head;         // ricordiamo il nodo da liberare
     l.head = l.node[l.head].next; // eliminiamo il primo nodo dalla lista usata
     free(l, p);                   // liberiamo il nodo
   }
@@ -145,7 +147,7 @@ void push_back(List& l, int elem) {
     push_front(l, elem);
   else {
     // la lista non è vuota e p è l'indice dell'ultimo elemento
-    Ptr q = alloc(l, elem, -1);
+    const Ptr q = alloc(l, elem, -1);
     if (q != -1) l.node[p].next = q;
   }
 }
@@ -180,7 +182,6 @@ void pop_back(List& l) {
     p = l.node[p].next;
   }
   if (p != -1) { // c'era un nodo da rimuovere
-    // l.node[p].next == -1
     if (prev != -1) l.node[prev].next = -1;
     else l.head = -1;
     free(l, p);
@@ -235,26 +236,26 @@ aggiornare `p`.
 
 ## Esercizi
 
-1. Scrivere la funzione `int length(const List& l)` che calcola la lunghezza
-   della lista (usata) `l`.
-2. Scrivere la funzione `int find_min(const List& l)` che individua l'elemento
-   più piccolo della lista `l`. Se la lista `l` non contiene elementi, la
-   funzione deve restituire `-1`.
-3. Scrivere la funzione `int sum(const List& l)` che calcola la somma degli
-   elementi della lista `l`.
-4. Scrivere (con una sola riga di codice, dopo aver risolto gli esercizi
-   precedenti) la funzione `float average(const List& l)` che calcola la media
-   degli elementi della lista `l`. 
-5. Scrivere la funzione `bool member(const List& l, int elem)` che determina se
-   l'elemento `elem` appartiene o no alla lista `l`. La funzione deve rispondere
-   `true` o `false` a seconda dei casi.
-5. (**IMPEGNATIVO**) Scrivere la funzione `void insert(List& l, int elem)` che
-   inserisce l'elemento `elem` in una lista `l` che si suppone essere
-   **ordinata** in modo non decrescente. Il risultato deve essere una lista
-   ordinata.
-6. Dopo aver risolto l'esercizio precedente, scrivere una funzione `void
+1. Scrivere la funzione `int length(const List& l)` che calcola la
+   lunghezza della lista (usata) `l`.
+2. Scrivere la funzione `int sum(const List& l)` che calcola la
+   somma degli elementi della lista `l`.
+3. Scrivere la funzione `int find_min(const List& l)` che individua
+   l'elemento più piccolo della lista `l`. Se la lista `l` non
+   contiene elementi, la funzione deve restituire `-1`.
+4. Scrivere (con una sola riga di codice, dopo aver risolto gli
+   esercizi precedenti) la funzione `float average(const List& l)`
+   che calcola la media degli elementi della lista `l`.
+5. Scrivere la funzione `bool member(const List& l, int elem)` che
+   determina se l'elemento `elem` appartiene o no alla lista `l`. La
+   funzione deve rispondere `true` o `false` a seconda dei casi.
+6. (**IMPEGNATIVO**) Scrivere la funzione `void insert(List& l, int
+   elem)` che inserisce l'elemento `elem` in una lista `l` che si
+   suppone essere **ordinata** in modo non decrescente. Il risultato
+   deve essere una lista ordinata.
+7. Dopo aver risolto l'esercizio precedente, scrivere una funzione `void
    sort(const List& l, List& m)` che ordina gli elementi della lista `l` e li
    memorizza nella lista `m`.
-7. (**IMPEGNATIVO**) Scrivere la funzione `void remove(List& l, int elem)` che
+8. (**IMPEGNATIVO**) Scrivere la funzione `void remove(List& l, int elem)` che
    elimina **la prima occorrenza** dell'elemento `elem` dalla lista `l`. La
    lista non viene modificata se l'elemento `elem` non è presente.
