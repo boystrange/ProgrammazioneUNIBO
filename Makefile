@@ -1,6 +1,6 @@
 NULL = 
 
-SECTIONS = EX1 EX2
+SECTIONS = EX1 EX2 EX3
 SOURCES = $(SECTIONS:%=%.md)
 TARGETS = $(SECTIONS:%=%.pdf)
 SOLUTIONS = $(SECTIONS:%=%.zip)
@@ -16,6 +16,9 @@ all: $(TARGETS) $(SOLUTIONS)
 	pandoc $< $(OPTIONS) -o $@
 
 EX1.zip: Coda/*.cpp Pila/*.cpp
+	zip -o $@ $^
+
+EX3.zip: List/ex?.cpp
 	zip -o $@ $^
 
 %.zip: %.cpp
