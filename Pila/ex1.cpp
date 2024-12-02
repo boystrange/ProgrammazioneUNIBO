@@ -7,7 +7,7 @@ const int MAX = 1024;
 // inserisce elemento in cima alla pila
 int push(int A[], const int size, const int e) {
     // precondizione: 0 <= size && size <= MAX
-    if (size == MAX - 1) {
+    if (size == MAX) {
         std::cerr << "push on full stack" << std::endl;
         return -1;
     } else {
