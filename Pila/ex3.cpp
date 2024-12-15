@@ -16,7 +16,7 @@ void init(Stack& stack) {
 }
 
 bool push(Stack& stack, const int elem) {
-  if (stack.size == MAX - 1) {
+  if (stack.size == MAX) {
     std::cerr << "push on full stack" << std::endl;
     return false;
   } else {

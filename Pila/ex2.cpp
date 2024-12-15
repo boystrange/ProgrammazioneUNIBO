@@ -7,7 +7,7 @@ const int MAX = 1024;
 
 // restituisce true se l'inserimento ha successo, false altrimenti
 bool push(int A[], int& size, const int e) {
-  if (size == MAX - 1) {
+  if (size == MAX) {
     std::cerr << "push on full stack" << std::endl;
     return false;
   } else {
