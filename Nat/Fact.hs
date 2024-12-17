@@ -3,4 +3,6 @@ fact 0 = 1
 fact n = n * fact (n - 1)
 
 main :: IO()
-main = putStrLn (show (fact 1000))
+main = do
+  s <- getContents
+  putStrLn (show (fact (read s)))

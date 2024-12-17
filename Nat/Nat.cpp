@@ -29,18 +29,21 @@ Nat::Nat(int n) {
 
 Nat Nat::add(const Nat& n) const {
   Nat r;
-  int carry = 0;
+  int co = 0;
   for (int i = 0; i < SIZE; i++) {
-    int s = digit[i] + n.digit[i] + carry;
+    int s = digit[i] + n.digit[i] + co;
     r.digit[i] = s % BASE;
-    carry = s / BASE;
+    co = s / BASE;
   }
   return r;
 }
 
 Nat Nat::mul(int n) const {
   if (n == 0) return Nat(0);
-  else return this->add(this->mul(n - 1));
+  else if (n % 2 == 0) {
+    Nat r = mul(n / 2);
+    return r.add(r);
+  } else return add(mul(n - 1));
 }
 
 // ESERCIZIO 1
@@ -52,10 +55,16 @@ Nat fact(int n) {
 
 // ESERCIZIO 2
 
-Nat fibo(int n) {
-  if (n == 0) return Nat(0);
-  else if (n == 1) return Nat(1);
-  else return fibo(n - 1).add(fibo(n - 2));
+Nat fibo(int k) {
+  Nat m(0);
+  Nat n(1);
+  while (k > 0) {
+    Nat t = m.add(n);
+    m = n;
+    n = t;
+    k--;
+  }
+  return m;
 }
 
 // ESERCIZIO 3
@@ -70,6 +79,7 @@ void Nat::print() const {
       std::cout << std::setw(DIGITS) << std::setfill('0') << digit[SIZE - i];
     }
   if (zero) std::cout << "0";
+  std::cout << std::endl;
 }
 
 // ESERCIZIO 4
@@ -102,32 +112,16 @@ Nat Nat::pred() const {
 
 // ESERCIZIO 6
 
-Nat mul(const Nat& x, Nat y) {
-  Nat r;
-  while (!y.zero()) {
-    r = r.add(x);
-    y = y.pred();
+Nat sub(const Nat& x, const Nat& y) {
+  Nat a = x;
+  Nat b = y;
+  while (!b.zero()) {
+    a = a.pred();
+    b = b.pred();
   }
-  return r;
-}
-
-// ESERCIZIO 7
-
-Nat pow(const Nat& x, int n) {
-  return n == 0 ? Nat(1) : mul(x, pow(x, n - 1));
-}
-
-// ESERCIZIO 8
-
-Nat sub(Nat x, Nat y) {
-  while (!y.zero()) {
-    x = x.pred();
-    y = y.pred();
-  }
-  return x;
+  return a;
 }
 
 int main() {
-  Nat r = fact(1000);
-  pow(Nat(2), 100).print();
+  sub(fact(10), fact(9)).print();
 }

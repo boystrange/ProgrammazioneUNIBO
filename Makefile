@@ -1,6 +1,6 @@
 NULL = 
 
-SECTIONS = EX1 EX2 EX3 EX4
+SECTIONS = EX1 EX2 EX3 EX4 EX5
 SOURCES = $(SECTIONS:%=%.md)
 TARGETS = $(SECTIONS:%=%.pdf)
 SOLUTIONS = $(SECTIONS:%=%.zip)
@@ -22,6 +22,9 @@ EX3.zip: List/ex?.cpp
 	zip -o $@ $^
 
 EX4.zip: Tree/*.cpp
+	zip -o $@ $^
+
+EX5.zip: Nat/*.cpp
 	zip -o $@ $^
 
 %.zip: %.cpp
