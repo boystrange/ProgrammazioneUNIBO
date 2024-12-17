@@ -82,7 +82,8 @@ Realizzare le seguenti funzioni:
 1. `int depth(const Node* p)` per calcolare la profondità di un
    albero generalizzato. Si ricorda che la profondità di un albero è
    il numero massimo di nodi lungo un percorso dalla radice a
-   `nullptr`;
+   `nullptr`, senza contare i passi necessari per passare da un nodo
+   ai fratelli successivi;
 2. `int sum(const Node* p)` per calcolare la **somma** di tutti gli
    elementi di albero generalizzato;
 3. `void post(const Node* p)` per stampare tutti gli elementi di un
