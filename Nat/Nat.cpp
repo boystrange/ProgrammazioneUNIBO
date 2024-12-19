@@ -113,13 +113,7 @@ Nat Nat::pred() const {
 // ESERCIZIO 6
 
 Nat sub(const Nat& x, const Nat& y) {
-  Nat a = x;
-  Nat b = y;
-  while (!b.zero()) {
-    a = a.pred();
-    b = b.pred();
-  }
-  return a;
+  return y.zero() ? x : sub(x.pred(), y.pred());
 }
 
 int main() {
