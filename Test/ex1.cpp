@@ -1,14 +1,13 @@
 
-// restituisce true se n non ha divisori da k a n - 1
+// restituisce true se n non ha divisori tra k e n - 1
 bool no_divisors(int n, int k) {
-  if (k == n) return true;
-  else return n % k != 0 && no_divisors(n, k + 1);
+  return k >= n || (n % k != 0 && no_divisors(n, n + 1));
 }
 
 bool is_prime(int n) {
   return n > 1 && no_divisors(n, 2);
 }
 
-bool there_are_primes(int data[], int n, int i) {
-  return i == n || (!is_prime(data[i]) && there_are_primes(data, n, i + 1));
+bool there_are_primes(int a[], int n, int i = 0) {
+  return i >= n || (is_prime(a[i]) && there_are_primes(a, n, i + 1));
 }

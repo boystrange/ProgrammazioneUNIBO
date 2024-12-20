@@ -1,4 +1,6 @@
 
+#include <iostream>
+
 struct Tavolo {
   int persone; // >= 0
   double orario;
@@ -7,11 +9,12 @@ struct Tavolo {
 };
 
 Tavolo* prenota_tavolo(Tavolo* p, int persone) {
-  if (p != nullptr && p->persone >= persone) {
+  if (p == nullptr) return nullptr;
+  else if (p->persone >= persone) {
     Tavolo* q = p->next;
     delete p;
     return q;
-  } else if (p != nullptr) {
+  } else {
     p->next = prenota_tavolo(p->next, persone);
     return p;
   }
